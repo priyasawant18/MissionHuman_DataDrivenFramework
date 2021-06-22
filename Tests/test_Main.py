@@ -31,7 +31,7 @@ def test_extract_state():
 
 
 def test_loadExcel():
-    book = openpyxl.load_workbook("C:\\Training matrial\\Project Covid\\MIssionHumanData.xlsx")
+    book = openpyxl.load_workbook("..//Test Data//MIssionHumanData.xlsx")
     sheet = book.active
     cell = sheet.cell(row=2, column=1)
     for i in range(1, sheet.max_row + 1):  # to get rows
