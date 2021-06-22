@@ -18,28 +18,36 @@ def test_setup():
     Intantiate.driver.get(Testlinks.BASE_URL)
     sleep(2)
 
+
 def test_extract_state():
     state_name = Intantiate.driver.find_elements_by_xpath("//div[@class='location-column']")
     print(len(state_name))
     for val in state_name:
        val.find_element_by_xpath("//div[@class='location-column']")
        Dict_state["State"] = val.text
-       #print(Dict1)
-       val.click()
-       sleep(2)
-       test_extract_district()
+       print(Dict_state)
+       # val.click()
+       # sleep(2)
+       # test_extract_district()
 
 
 def test_loadExcel():
     book = openpyxl.load_workbook("..//Test Data//MIssionHumanData.xlsx")
     sheet = book.active
     cell = sheet.cell(row=2, column=1)
+    temp = []
+    res = dict()
     for i in range(1, sheet.max_row + 1):  # to get rows
-        if sheet.cell(row=i, column=2).value == "Andhra Pradesh":
-            for j in range(1, sheet.max_column + 1):  # to get column
-                # print(sheet.cell(row=i, column=1).value)
-                Dict[sheet.cell(row=1, column=j).value] = sheet.cell(row=i, column=j).value
-    print(Dict)
+        # if sheet.cell(row=i, column=2).value == "Andhra Pradesh":
+        for j in range(1, sheet.max_column + 1):  # to get column
+            # print(sheet.cell(row=i, column=1).value)
+            Dict[sheet.cell(row=1, column=j).value] = sheet.cell(row=i, column=j).value
+            # Remove duplicate values in dictionary
+            # Using dictionary comprehension
+        temp = {val: key for key, val in Dict.items()}
+        res = {val: key for key, val in temp.items()}
+        print(res)
+
 
 def test_StateCompare():
     for key in list(Dict_state.keys()):
@@ -49,16 +57,22 @@ def test_StateCompare():
             print(False)
 
 def test_extract_district():
-    district_name = Intantiate.driver.find_elements_by_xpath("//div[@class='location-column']")
-    print(len(district_name))
-    for district in district_name:
-        district.find_element_by_xpath("//div[@class='location-column']")
-        Dict_district["District"] = district.text
-        print(Dict_district)
-        district.click()
-        test_extract_resourse()
-    #Intantiate.driver.find_element_by_xpath("//div[@class='bookmarked' and contains(text(), 'MissionHumane.org')]").click()
-    sleep(2)
+    state_name = Intantiate.driver.find_elements_by_xpath("//div[@class='location-column']")
+    print(len(state_name))
+    for val in state_name:
+        val.find_element_by_xpath("//div[@class='location-column']")
+        Dict_state["State"] = val.text
+        val.click()
+        sleep(2)
+        district_name = Intantiate.driver.find_elements_by_xpath("//div[@class='location-column']")
+        print(len(district_name))
+        for district in district_name:
+              district.find_element_by_xpath("//div[@class='location-column']")
+              Dict_district["District"] = district.text
+              print(Dict_district)
+              district.click()
+              test_extract_resourse()
+              sleep(2)
 
 def test_extract_resourse():
     resourse_name = Intantiate.driver.find_elements_by_xpath("//div[@class='sc-hKFxyN kksiKu']")
