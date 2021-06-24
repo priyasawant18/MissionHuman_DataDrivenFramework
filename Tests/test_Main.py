@@ -1,4 +1,5 @@
 from time import sleep
+import pandas as pd
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -15,6 +16,7 @@ Dict_resourse = {}
 Dict_data = {}
 Dict_excel_state = {}
 
+df_covid_data = pd.DataFrame(columns=['category', 'city', 'contact_name', 'phoneNumber', 'description'])
 def test_setup():
     Intantiate.driver.get(Testlinks.BASE_URL)
     sleep(2)
@@ -79,6 +81,8 @@ def test_extract_district():
         val.find_element_by_xpath("//div[@class='location-column']")
         Dict_state["State"] = val.text
         val.click()
+        #state = val.click()
+        #Intantiate.driver.execute_script("arguments[0].click();", state)
         sleep(2)
         district_name = Intantiate.driver.find_elements_by_xpath("//div[@class='location-column']")
         print(len(district_name))
@@ -102,13 +106,20 @@ def test_extract_resourse():
         test_extract_data()
 
 
-def test_extract_data()
+def test_extract_data():
     data_count = Intantiate.driver.find_elements_by_xpath("//div[@class='MuiCardContent-root lead-container']")
     print(len(data_count))
     for data in data_count:
         data.find_element_by_xpath("//div[@class='MuiCardContent-root lead-container']")
-        Dict_data["data"] = data.text
-        print(Dict_data)
+        #Dict_data["data"] = data.text
+        #print(Dict_data)
+        df_covid_data.loc[len(df_covid_data)] = ["oxygen",
+                                                 "city",
+                                                 "ContactName",
+                                                 "phonno",
+                                                 data.text
+                                                 ]
+    print(df_covid_data)
 
     Intantiate.driver.find_element_by_xpath("//img[@alt='back']").click()
     try:
